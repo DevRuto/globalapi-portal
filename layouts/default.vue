@@ -1,117 +1,116 @@
-<template>
-  <v-app dark>
-    <v-navigation-drawer
+<template lang="pug">
+  v-app(dark)
+    v-navigation-drawer(
       v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
+      :clipped="true"
       fixed
       app
-    >
-      <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
+    )
+      v-list-item
+        v-list-item-content
+          v-list-item-title(class="title") {{ $t('dashboard') }}
+      v-divider
+      v-list(dense nav)
+        template(v-for="(item, i) in navItems")
+          v-list-item(
+            :key="i",
+            :to="item.to"
+            router
+            exact
+          )
+            v-list-item-action
+              v-icon {{ item.icon }}
+            v-list-item-content
+              v-list-item-title(v-text="item.title")
+
+    v-app-bar(
       fixed
       app
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="fixed = !fixed"
-      >
-        <v-icon>mdi-minus</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title" />
-      <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-app-bar>
-    <v-main>
-      <v-container>
-        <Nuxt />
-      </v-container>
-    </v-main>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :absolute="!fixed"
+      :clipped-left="true"
+    )
+      v-app-bar-nav-icon(@click.stop="drawer = !drawer")
+      v-toolbar-title(v-text="title")
+      v-spacer
+
+    v-main
+      v-container
+        v-breadcrumbs(
+          class="capitalize"
+          divider=">"
+          :items="breadcrumbs"
+        )
+        v-divider
+        nuxt
+
+    v-footer(
       app
-    >
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
-  </v-app>
+      :fixed="false"
+    )
+      span GlobalAPI &copy; {{ currentYear }}
+      v-spacer
+      span
+        | Powered by&nbsp;
+        a(href="https://nuxtjs.org/") Nuxt.JS
+        | &nbsp;and&nbsp;
+        a(href="https://vuetifyjs.com/") Vuetify
 </template>
 
 <script>
 export default {
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
+      drawer: true,
+      title: 'GlobalAPI',
+      dark: true,
+      breadcrumbs: []
+    };
+  },
+  computed: {
+    currentYear () {
+      return new Date().getUTCFullYear();
+    },
+    navItems () {
+      return [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-home',
+          title: this.$t('home'),
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-map',
+          title: this.$t('maps'),
+          to: '/maps'
         }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      ];
+    }
+  },
+  watch: {
+    $route (_newVal) {
+      this.setBreadcrumbs();
+    }
+  },
+  mounted () {
+    this.setBreadcrumbs();
+  },
+  methods: {
+    setBreadcrumbs () {
+      console.log(this.$nuxt.$route.path);
+      this.breadcrumbs = this.$nuxt.$route.path
+        .split('/')
+        .filter(v => v)
+        .map((routeName, i, arr) => ({
+          text: routeName,
+          disabled: arr.length - 1 === i,
+          exact: true,
+          to: `/${arr.slice(0, i + 1).join('/')}`
+        }));
     }
   }
-}
+};
 </script>
+
+<style lang="scss" scoped>
+.capitalize {
+  text-transform: capitalize;
+}
+</style>
