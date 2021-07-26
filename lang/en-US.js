@@ -1,7 +1,12 @@
 const lang = {
   dashboard: 'Dashboard',
-  home: 'Home',
-  maps: 'Maps'
+  overview: 'Overview',
+  maps: 'Maps',
+  modes: 'Modes',
+  bans: 'Bans',
+  servers: 'Servers',
+  records: 'Records',
+  jumpstats: 'Jumpstats'
 };
 
 export default async (context, locale) => {

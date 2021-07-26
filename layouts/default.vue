@@ -73,13 +73,38 @@ export default {
       return [
         {
           icon: 'mdi-home',
-          title: this.$t('home'),
+          title: this.$t('overview'),
           to: '/'
         },
         {
           icon: 'mdi-map',
           title: this.$t('maps'),
           to: '/maps'
+        },
+        {
+          icon: 'mdi-tune',
+          title: this.$t('modes'),
+          to: '/modes'
+        },
+        {
+          icon: 'mdi-hammer',
+          title: this.$t('bans'),
+          to: '/bans'
+        },
+        {
+          icon: 'mdi-server',
+          title: this.$t('servers'),
+          to: '/servers'
+        },
+        {
+          icon: 'mdi-timer',
+          title: this.$t('records'),
+          to: '/records'
+        },
+        {
+          icon: 'mdi-chart-timeline-variant',
+          title: this.$t('jumpstats'),
+          to: '/jumpstats'
         }
       ];
     }
@@ -94,7 +119,6 @@ export default {
   },
   methods: {
     setBreadcrumbs () {
-      console.log(this.$nuxt.$route.path);
       this.breadcrumbs = this.$nuxt.$route.path
         .split('/')
         .filter(v => v)
@@ -104,6 +128,12 @@ export default {
           exact: true,
           to: `/${arr.slice(0, i + 1).join('/')}`
         }));
+      if (this.breadcrumbs.length === 0) {
+        this.breadcrumbs = [{
+          text: 'Overview',
+          disabled: true
+        }];
+      }
     }
   }
 };
