@@ -32,14 +32,13 @@
       v-toolbar-title(v-text="title")
       v-spacer
 
-    v-main
+    v-main(class="mb-1")
+      v-breadcrumbs(
+        class="capitalize grey darken-4"
+        divider=">"
+        :items="breadcrumbs"
+      )
       v-container
-        v-breadcrumbs(
-          class="capitalize"
-          divider=">"
-          :items="breadcrumbs"
-        )
-        v-divider
         nuxt
 
     v-footer(
