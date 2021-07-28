@@ -9,6 +9,4 @@ const lang = {
   jumpstats: 'Jumpstats'
 };
 
-export default async (context, locale) => {
-  return await Promise.resolve(lang);
-};
+export default lang;
