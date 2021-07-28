@@ -27,14 +27,18 @@
         v-model="page"
         @prev="prevPage"
         @next="nextPage"
+        @first="page = 1"
         :max-page="pageMax"
         :show-pages="true"
         :show-max="true"
+        :show-first="true"
       )
 </template>
 
 <script>
 import Pagination from '~/components/Pagination.vue';
+import { API_HOST } from '~/app.config';
+
 export default {
   components: {
     Pagination
@@ -72,7 +76,7 @@ export default {
       this.loading = true;
       const params = new URLSearchParams();
       params.set('limit', 9999);
-      const result = await this.$axios.$get('https://kztimerglobal.com/api/v2.0/maps', { params });
+      const result = await this.$axios.$get(`${API_HOST}/api/v2.0/maps`, { params });
       this.maps = result;
       this.pageMax = Math.ceil(this.maps.length / this.itemsPerPage);
       this.loading = false;
