@@ -1,11 +1,15 @@
 <template lang="pug">
   div
+    v-btn(text icon @click="onFirst" v-if="showFirst" :disabled="value === 1")
+      v-icon mdi-page-first
     v-btn(text icon @click="onPrev" :disabled="value === 1")
-      v-icon(v-text="'$prev'")
+      v-icon mdi-chevron-left
     span(v-if="showPages") {{ value }}
       span(v-if="showMax")  / {{ maxPage }}
-    v-btn(text icon @click="onNext" :disabled="maxPage !== -1 && maxPage == value")
-      v-icon(v-text="'$next'")
+    v-btn(text icon @click="onNext" :disabled="maxPage !== -1 && maxPage === value")
+      v-icon mdi-chevron-right
+    v-btn(text icon @click="onLast" v-if="showLast" :disabled="maxPage !== -1 && maxPage === value")
+      v-icon mdi-page-last
 </template>
 
 <script>
@@ -27,6 +31,14 @@ export default {
     showMax: {
       type: Boolean,
       default: false
+    },
+    showFirst: {
+      type: Boolean,
+      default: false
+    },
+    showLast: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -41,6 +53,12 @@ export default {
         return;
       }
       this.$emit('next');
+    },
+    onFirst () {
+      this.$emit('first');
+    },
+    onLast () {
+      this.$emit('last');
     }
   }
 };
