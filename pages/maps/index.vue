@@ -1,7 +1,17 @@
 <template lang="pug">
   div
     h1 Maps
-    div(class="mx-14 py-4")
+    div(class="mx-14 pb-4")
+    v-row(class="pb-4 mx-2")
+      v-spacer
+      pagination(
+        v-model="page"
+        @prev="prevPage"
+        @next="nextPage"
+        :max-page="pageMax"
+        :show-pages="true"
+        :show-max="true"
+      )
     v-data-table(
       :options.sync="options"
       :loading="loading"
@@ -11,14 +21,16 @@
       hide-default-footer
       class="elevation-4"
     )
-    pagination(
-      v-model="page"
-      @prev="prevPage"
-      @next="nextPage"
-      :max-page="pageMax"
-      :show-pages="true"
-      :show-max="true"
-    )
+    v-row(class="pt-4 mx-2")
+      v-spacer
+      pagination(
+        v-model="page"
+        @prev="prevPage"
+        @next="nextPage"
+        :max-page="pageMax"
+        :show-pages="true"
+        :show-max="true"
+      )
 </template>
 
 <script>
@@ -45,6 +57,11 @@ export default {
       itemsPerPage: 10,
       page: 1,
       pageMax: 1
+    };
+  },
+  head () {
+    return {
+      title: 'Maps'
     };
   },
   mounted () {
