@@ -9,10 +9,12 @@
         @prev="prevPage"
         @next="nextPage"
         @first="page = 1"
+        @last="page = pageMax"
         :max-page="pageMax"
         :show-pages="true"
         :show-max="true"
         :show-first="true"
+        :show-last="true"
       )
     v-data-table(
       :loading="loading"
@@ -29,10 +31,12 @@
         @prev="prevPage"
         @next="nextPage"
         @first="page = 1"
+        @last="page = pageMax"
         :max-page="pageMax"
         :show-pages="true"
         :show-max="true"
         :show-first="true"
+        :show-last="true"
       )
 </template>
 
