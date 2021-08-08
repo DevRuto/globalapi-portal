@@ -6,9 +6,16 @@
       fixed
       app
     )
-      v-list-item
-        v-list-item-content
-          v-list-item-title(class="title") {{ $t('dashboard') }}
+      template(v-slot:prepend)
+        v-list-item(two-line link)
+          v-list-item-avatar(color="red")
+            v-img(v-if="avatar")
+            span(v-else) {{ name[0] }}
+          v-list-item-content
+            v-list-item-title(class="text-h6") {{ name }}
+            v-list-item-subtitle Global Admin
+      v-divider
+
       v-divider
       v-list(dense nav)
         template(v-for="(item, i) in navItems")
@@ -61,7 +68,9 @@ export default {
       drawer: true,
       title: 'GlobalAPI',
       dark: true,
-      breadcrumbs: []
+      breadcrumbs: [],
+      name: 'Ruto',
+      avatar: false
     };
   },
   computed: {
@@ -133,6 +142,10 @@ export default {
           disabled: true
         }];
       }
+      this.breadcrumbs = [
+        { text: 'Dashboard', disabled: true },
+        ...this.breadcrumbs
+      ];
     }
   }
 };
