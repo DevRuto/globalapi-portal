@@ -4,6 +4,8 @@
     div(class="mx-14 pb-4")
     v-row(class="pb-4 mx-2")
       v-spacer
+      v-btn(icon :disabled="loading" @click="getMaps")
+        v-icon mdi-refresh
       pagination(
         v-model="page"
         @prev="prevPage"
@@ -26,6 +28,8 @@
     )
     v-row(class="pt-4 mx-2")
       v-spacer
+      v-btn(icon :disabled="loading" @click="getMaps")
+        v-icon mdi-refresh
       pagination(
         v-model="page"
         @prev="prevPage"
@@ -74,13 +78,18 @@ export default {
   },
   methods: {
     async getMaps () {
-      this.loading = true;
-      const params = new URLSearchParams();
-      params.set('limit', 9999);
-      const result = await this.$axios.$get(`${API_HOST}/api/v2.0/maps`, { params });
-      this.maps = result;
-      this.pageMax = Math.ceil(this.maps.length / this.itemsPerPage);
-      this.loading = false;
+      try {
+        this.loading = true;
+        const params = new URLSearchParams();
+        params.set('limit', 9999);
+        const result = await this.$axios.$get(`${API_HOST}/api/v2.0/maps`, { params });
+        this.maps = result;
+        this.pageMax = Math.ceil(this.maps.length / this.itemsPerPage);
+      } catch {
+        this.$toast.error('[API] Unable to fetch maps');
+      } finally {
+        this.loading = false;
+      }
     },
     prevPage () {
       this.page--;

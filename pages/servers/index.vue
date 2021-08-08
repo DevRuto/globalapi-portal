@@ -3,6 +3,8 @@
     h1 Servers
     v-row(class="pb-4 mx-2")
       v-spacer
+      v-btn(icon :disabled="loading" @click="getServers")
+        v-icon mdi-refresh
       pagination(
         v-model="page"
         @prev="prevPage"
@@ -32,6 +34,8 @@
           v-icon(right) mdi-open-in-new
     v-row(class="pt-4 mx-2")
       v-spacer
+      v-btn(icon :disabled="loading" @click="getServers")
+        v-icon mdi-refresh
       pagination(
         v-model="page"
         @prev="prevPage"
@@ -74,10 +78,15 @@ export default {
   },
   methods: {
     async getServers () {
-      this.loading = true;
-      this.servers = await this.$axios.$get(`${API_HOST}/api/v2.0/servers?is_validated=true`);
-      this.pageMax = Math.ceil(this.servers.length / this.itemsPerPage);
-      this.loading = false;
+      try {
+        this.loading = true;
+        this.servers = await this.$axios.$get(`${API_HOST}/api/v2.0/servers?is_validated=true`);
+        this.pageMax = Math.ceil(this.servers.length / this.itemsPerPage);
+      } catch {
+        this.$toast.error('[API] Unable to fetch servers');
+      } finally {
+        this.loading = false;
+      }
     },
     prevPage () {
       this.page--;
