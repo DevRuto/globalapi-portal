@@ -131,7 +131,7 @@ export default {
         .split('/')
         .filter(v => v)
         .map((routeName, i, arr) => ({
-          text: routeName,
+          text: this.$t(routeName),
           disabled: arr.length - 1 === i,
           exact: true,
           to: `/${arr.slice(0, i + 1).join('/')}`
@@ -143,7 +143,7 @@ export default {
         }];
       }
       this.breadcrumbs = [
-        { text: 'Dashboard', disabled: true },
+        { text: this.$t('dashboard'), disabled: true },
         ...this.breadcrumbs
       ];
     }

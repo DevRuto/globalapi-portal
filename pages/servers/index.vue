@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    h1 Servers
+    h1 {{ $t('servers') }}
     v-row(class="pb-4 mx-2")
       v-spacer
       v-btn(icon :disabled="loading" @click="getServers")
@@ -74,6 +74,11 @@ export default {
       itemsPerPage: 10,
       page: 1,
       pageMax: 1
+    };
+  },
+  head () {
+    return {
+      title: this.$t('servers')
     };
   },
   mounted () {

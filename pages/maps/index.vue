@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    h1 Maps
+    h1 {{ $t('maps') }}
     div(class="mx-14 pb-4")
     v-row(class="pb-4 mx-2")
       v-spacer
@@ -70,7 +70,7 @@ export default {
   },
   head () {
     return {
-      title: 'Maps'
+      title: this.$t('maps')
     };
   },
   mounted () {
