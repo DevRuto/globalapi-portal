@@ -32,6 +32,8 @@
           v-icon(left) mdi-steam
           | {{ item.owner_steamid64 }}
           v-icon(right) mdi-open-in-new
+      template(v-slot:item.actions="{ item }")
+        v-btn(text color="blue" :href="`steam://connect/${item.ip}:${item.port}`") {{ $t('connect') }}
     v-row(class="pt-4 mx-2")
       v-spacer
       v-btn(icon :disabled="loading" @click="getServers")
@@ -65,7 +67,8 @@ export default {
         { text: 'ID', value: 'id' },
         { text: 'Address', value: 'endpoint' },
         { text: 'Name', value: 'name' },
-        { text: 'Owner', value: 'owner' }
+        { text: 'Owner', value: 'owner' },
+        { text: '', value: 'actions' }
       ],
       servers: [],
       itemsPerPage: 10,

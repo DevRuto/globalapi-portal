@@ -6,7 +6,8 @@ const lang = {
   bans: 'Bans',
   servers: 'Servers',
   records: 'Records',
-  jumpstats: 'Jumpstats'
+  jumpstats: 'Jumpstats',
+  connect: 'Connect'
 };
 
 export default lang;
