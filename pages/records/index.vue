@@ -1,48 +1,40 @@
 <template lang="pug">
   div
-    h1 {{ $t('maps') }}
+    h1 {{ $t('records') }}
     div(class="mx-14 pb-4")
     v-row(class="pb-4 mx-2")
       v-spacer
-      v-btn(icon :disabled="loading" @click="getMaps")
+      v-btn(icon :disabled="loading" @click="getRecords")
         v-icon mdi-refresh
       pagination(
         v-model="page"
         @prev="prevPage"
         @next="nextPage"
-        @first="page = 1"
-        @last="page = pageMax"
+        @first="page = 1; getRecords()"
         :loading="loading"
-        :max-page="pageMax"
         :show-pages="true"
-        :show-max="true"
         :show-first="true"
-        :show-last="true"
       )
     v-data-table(
       :loading="loading"
       :headers="headers"
-      :items="maps"
+      :items="records"
       :page.sync="page"
       hide-default-footer
       class="elevation-5"
     )
     v-row(class="pt-4 mx-2")
       v-spacer
-      v-btn(icon :disabled="loading" @click="getMaps")
+      v-btn(icon :disabled="loading" @click="getRecords")
         v-icon mdi-refresh
       pagination(
         v-model="page"
         @prev="prevPage"
         @next="nextPage"
-        @first="page = 1"
-        @last="page = pageMax"
+        @first="page = 1; getRecords()"
         :loading="loading"
-        :max-page="pageMax"
         :show-pages="true"
-        :show-max="true"
         :show-first="true"
-        :show-last="true"
       )
 </template>
 
@@ -59,45 +51,49 @@ export default {
       loading: true,
       headers: [
         { text: 'ID', value: 'id' },
-        { text: 'Name', value: 'name' },
-        { text: 'Filesize', value: 'filesize' },
-        { text: 'Difficulty', value: 'difficulty' },
-        { text: 'Validated', value: 'validated' }
+        { text: 'Player', value: 'player_name' },
+        { text: 'Map', value: 'map_name' },
+        { text: 'Mode', value: 'mode' },
+        { text: 'Stage', value: 'stage' },
+        { text: 'Time', value: 'time' },
+        { text: 'Teleports', value: 'teleports' },
+        { text: 'Created', value: 'created_on' }
       ],
-      maps: [],
+      records: [],
       itemsPerPage: 10,
-      page: 1,
-      pageMax: 1
+      page: 1
     };
   },
   head () {
     return {
-      title: this.$t('maps')
+      title: this.$t('records')
     };
   },
   mounted () {
-    this.getMaps();
+    this.getRecords();
   },
   methods: {
-    async getMaps () {
+    async getRecords () {
       try {
         this.loading = true;
         const params = new URLSearchParams();
-        params.set('limit', 9999);
-        const result = await this.$axios.$get(`${API_HOST}/api/v2.0/maps`, { params });
-        this.maps = result;
-        this.pageMax = Math.ceil(this.maps.length / this.itemsPerPage);
+        params.set('offset', (this.page - 1) * this.itemsPerPage);
+        params.set('limit', this.itemsPerPage);
+        const result = await this.$axios.$get(`${API_HOST}/api/v2.0/records/top`, { params });
+        this.records = result;
       } catch {
-        this.$toast.error('[API] Unable to fetch maps');
+        this.$toast.error('[API] Unable to fetch records');
       } finally {
         this.loading = false;
       }
     },
     prevPage () {
       this.page--;
+      this.getRecords();
     },
     nextPage () {
       this.page++;
+      this.getRecords();
     }
   }
 };

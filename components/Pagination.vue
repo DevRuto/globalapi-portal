@@ -1,20 +1,24 @@
 <template lang="pug">
   div
-    v-btn(text icon @click="onFirst" v-if="showFirst" :disabled="value === 1")
+    v-btn(text icon @click="onFirst" v-if="showFirst" :disabled="value === 1 || loading")
       v-icon mdi-page-first
-    v-btn(text icon @click="onPrev" :disabled="value === 1")
+    v-btn(text icon @click="onPrev" :disabled="(value === 1) || loading")
       v-icon mdi-chevron-left
     span(v-if="showPages") {{ value }}
       span(v-if="showMax")  / {{ maxPage }}
-    v-btn(text icon @click="onNext" :disabled="maxPage !== -1 && maxPage === value")
+    v-btn(text icon @click="onNext" :disabled="(maxPage !== -1 && maxPage === value) || loading")
       v-icon mdi-chevron-right
-    v-btn(text icon @click="onLast" v-if="showLast" :disabled="maxPage !== -1 && maxPage === value")
+    v-btn(text icon @click="onLast" v-if="showLast" :disabled="(maxPage !== -1 && maxPage === value) || loading")
       v-icon mdi-page-last
 </template>
 
 <script>
 export default {
   props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Number,
       default: 1
